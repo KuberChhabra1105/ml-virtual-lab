@@ -1,0 +1,29 @@
+:root {
+    /* Color Palette */
+    --bg-main: #FFF8DE;
+    --bg-dark: #576A8F;
+    --accent-soft: #B7BDF7;
+    --accent-strong: #FF7444;
+
+    --text-primary: #2b2b2b;
+    --text-inverse: #ffffff;
+    --shadow-soft: rgba(0, 0, 0, 0.08);
+
+    /* Typography */
+    --font-main: 'Inter', sans-serif;
+
+    /* Sizing - Fluid Typography */
+    --text-hero: clamp(48px, 8vw, 120px);
+    --text-h2: clamp(28px, 4vw, 56px);
+    --text-h3: clamp(20px, 2vw, 32px);
+    --text-body: 16px;
+
+    /* Spacing */
+    --space-unit: 8px;
+    --space-sm: 16px;
+    --space-md: 32px;
+    --space-lg: 64px;
+    --space-xl: 128px;
+
+    --nav-height: 80px;
+}

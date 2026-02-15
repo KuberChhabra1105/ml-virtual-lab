@@ -1,0 +1,25 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: var(--bg-main);
+  font-family: var(--font-main);
+}
+
+#webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
+  z-index: 0;
+}
+
+#app {
+  position: relative;
+  z-index: 2;
+}
+
+section {
+  min-height: 100vh;
+  padding: 12vh 8vw;
+}

@@ -1,0 +1,42 @@
+# Node
+node_modules/
+
+# Next.js / Vite / React builds
+.next/
+out/
+dist/
+build/
+.vercel/
+
+# Firebase
+.firebase/
+.firebaserc
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files (never upload secrets)
+.env
+.env.local
+.env.development
+.env.production
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# IDE junk
+.vscode/
+.idea/
+
+# Cache
+.cache/
+.tmp/
+.temp/
+
+# Antigravity / Cloud workspace junk
+workspace/
+cloudworkstations/

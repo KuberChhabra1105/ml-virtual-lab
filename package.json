@@ -1,0 +1,21 @@
+{
+    "name": "ml-virtual-lab",
+    "private": true,
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@react-three/postprocessing": "^3.0.4",
+        "@studio-freight/lenis": "^1.0.33",
+        "gsap": "^3.12.5",
+        "lenis": "^1.0.42",
+        "three": "^0.160.1"
+    },
+    "devDependencies": {
+        "vite": "^5.0.12"
+    }
+}

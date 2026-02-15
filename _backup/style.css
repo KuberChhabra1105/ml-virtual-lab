@@ -1,0 +1,63 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #0b0b0b;
+    font-family: system-ui, sans-serif;
+}
+
+#canvas-container {
+    position: fixed;
+    inset: 0;
+}
+
+#ui-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 280px;
+    padding: 16px;
+    background: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    color: #fff;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.control-group {
+    margin-bottom: 12px;
+}
+
+.control-group label {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+button {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#startBtn {
+    background: #22c55e;
+}
+
+#stopBtn {
+    background: #ef4444;
+}
+
+#resetBtn {
+    background: #f59e0b;
+}
+
+.control-group.buttons {
+    display: flex;
+    gap: 8px;
+}
+
+input[type=range] {
+    width: 100%;
+}
