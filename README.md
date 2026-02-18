@@ -1,62 +1,59 @@
+
+
 🌐 Machine Learning Virtual Lab (ML-VLab)
-Welcome to the ML Virtual Lab! This project is a modern, interactive Learning Management System (LMS) designed to make complex Machine Learning concepts intuitive. Instead of just reading about algorithms, you get to play with them in a high-performance 3D environment.
+Welcome to the ML Virtual Lab! This project is an interactive Learning Management System (LMS) designed to make complex Machine Learning concepts intuitive. Instead of just reading about algorithms, you can experiment with them in a high-performance 3D environment.
 
-Inspired by the IIT Virtual Labs initiative, we built this to bridge the gap between heavy theory and hands-on simulation.
+Live Site: https://mlvirtuallab.vercel.app/
 
-🧪 What's inside?
-We’ve currently implemented three core experiments that cover the pillars of ML:
+🧪 What's Inside?
+This lab provides a student-centric, remote-access environment to master fundamental ML algorithms through visualization and simulation.
 
-Linear Regression: Watch Gradient Descent in real-time as it tries to find the line of best fit. You can see the MSE (Error) drop as the model learns.
+Linear Regression: Watch Gradient Descent in real-time as it finds the line of best fit. Observe how the Mean Squared Error (MSE) drops as the model learns.
 
-Neural Networks (ANN): A visualizer that shows how data pulses through input, hidden, and output layers.
+Neural Networks (ANN): An interactive visualizer showing how data pulses through input, hidden, and output layers.
 
-K-Means Clustering: See unsupervised learning in action as centroids move to group scattered data points automatically.
+K-Means Clustering: See unsupervised learning in action with step-by-step animations of centroid convergence.
 
 🛠 The Tech Stack
-Frontend: Vanilla JS (ES6+), Three.js for the 3D world, Chart.js for the math viz, and Navigo for smooth, no-refresh routing.
+Frontend: Vanilla JS (ES6+), Three.js for the 3D environment, Chart.js for mathematical visualization, and Navigo for smooth routing.
 
 Backend: Node.js & Express.
 
-Database: MongoDB for saving your progress and quiz scores.
+Database: MongoDB for storing student progress and quiz results.
 
-Build Tool: Vite (because waiting for slow builds is the worst).
+Deployment: Hosted on Vercel with continuous integration from GitHub.
 
 🚀 Getting Started
 1. Requirements
-Make sure you have Node.js installed on your machine.
+Ensure you have Node.js installed on your system.
 
-2. Setup
-First, clone this repo and grab the dependencies:
-
+2. Installation
 Bash
-# Install frontend tools
+# Clone the repository
+git clone https://github.com/KuberChhabra1105/ml-virtual-lab.git
+cd ml-virtual-lab
+
+# Install frontend dependencies
 npm install
 
 # Setup the backend
 cd server
 npm install
 cd ..
-3. Environment Variables
-Inside the /server folder, create a .env file and add your MongoDB connection string:
+3. Environment Setup
+In the /server folder, create a .env file:
 
 Code snippet
-MONGO_URI=your_mongodb_atlas_link_here
-JWT_SECRET=something_super_secret
-4. Let's Go!
-Run the master command to start both the frontend and the backend at once:
-
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+4. Run Locally
 Bash
 npm run dev
-Now, open your browser to http://localhost:5173 and start learning!
+📖 How to Use the Lab
+Access: Enter as a student or use 'Guest Access' to explore.
 
-📖 How to use the Lab
-Login: Enter as a student or use 'Guest Access' to browse.
+Explore: Use the Dashboard to pick an experiment from the ML Lab list.
 
-Pick a Topic: From the dashboard, enter the ML Lab to see the list of experiments.
+Learn: Each experiment includes Theory, Procedure, and an interactive Simulation.
 
-Learn: Start with Theory, check the Procedure, then jump into the Simulation to get your hands dirty.
-
-Test Yourself: Wrap up with the Quiz to see if you’ve mastered the concept.
-
-🤝 Contributing
-Found a bug? Want to add a Decision Tree or SVM simulation? Feel free to fork this, make your changes, and send a PR.
+Assess: Wrap up with a Quiz to evaluate your understanding of the topic.
