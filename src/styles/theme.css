@@ -1,29 +1,39 @@
 :root {
-    /* Color Palette */
     --bg-main: #FFF8DE;
-    --bg-dark: #576A8F;
-    --accent-soft: #B7BDF7;
+    --text-primary: #1a1a1a;
     --accent-strong: #FF7444;
 
-    --text-primary: #2b2b2b;
-    --text-inverse: #ffffff;
-    --shadow-soft: rgba(0, 0, 0, 0.08);
+    /* Responsive Font Sizes - "Goldilocks" Zone (Not too big, not too small) */
+    --text-hero: clamp(3rem, 5vw, 5rem); 
+    --text-h2: clamp(2rem, 3vw, 3.5rem);
+    --text-body: clamp(1rem, 1.2vw, 1.25rem);
+}
 
-    /* Typography */
-    --font-main: 'Inter', sans-serif;
+h1 {
+    font-size: var(--text-hero);
+    line-height: 1.1;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
 
-    /* Sizing - Fluid Typography */
-    --text-hero: clamp(48px, 8vw, 120px);
-    --text-h2: clamp(28px, 4vw, 56px);
-    --text-h3: clamp(20px, 2vw, 32px);
-    --text-body: 16px;
+h2 {
+    font-size: var(--text-h2);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    text-align: center;
+}
 
-    /* Spacing */
-    --space-unit: 8px;
-    --space-sm: 16px;
-    --space-md: 32px;
-    --space-lg: 64px;
-    --space-xl: 128px;
-
-    --nav-height: 80px;
+p {
+    font-size: var(--text-body);
+    line-height: 1.6;
+    color: #4a5568;
+    max-width: 600px;
+    text-align: center;
+    background: rgba(255, 248, 222, 0.9); /* Slight background to read over 3D */
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 0 auto;
 }

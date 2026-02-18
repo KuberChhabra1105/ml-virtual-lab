@@ -1,68 +1,91 @@
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import * as THREE from 'three';
+import GUI from 'lil-gui';
 
 export default class SimulationsSection {
     constructor(experience) {
-        this.container = document.querySelector('#app');
+        this.experience = experience;
+        this.scene = experience.scene;
+        
+        // 3D Group Position
+        this.instance = new THREE.Group();
+        this.instance.position.set(0, -20, 0); 
+        this.scene.add(this.instance);
+
+        this.params = { learningRate: 0.05, speed: 1, reset: () => this.resetBall() };
+
         this.initDOM();
-        this.initAnimations();
+        this.createLossLandscape();
+        this.createControls();
     }
 
     initDOM() {
+        const container = document.querySelector('#app');
         this.element = document.createElement('section');
-        this.element.id = 'simulations';
-        this.element.style.backgroundColor = '#f9f5eb'; // Slightly different shade if needed, or transparent
-
-        // Sim cards data
-        const sims = [
-            { title: 'Gradient Descent', desc: 'Visualize optimization landscapes.' },
-            { title: 'Neural Network', desc: 'Interactive forward & backprop.' },
-            { title: 'Clustering', desc: 'K-Means and DBSCAN in 3D.' }
-        ];
-
-        let cardsHTML = sims.map(sim => `
-            <div class="sim-card" style="
-                background: white; 
-                padding: 40px; 
-                border-radius: 4px; 
-                box-shadow: 0 10px 40px var(--shadow-soft);
-                opacity: 0;
-                transform: translateY(40px);
-            ">
-                <h3 class="text-h3" style="margin-bottom: 1rem;">${sim.title}</h3>
-                <p class="text-body">${sim.desc}</p>
-            </div>
-        `).join('');
-
+        this.element.id = 'simulation-ui';
         this.element.innerHTML = `
-            <div class="container">
-                <h2 class="text-h2" style="text-align: center; margin-bottom: 60px;">Available Simulations</h2>
-                <div class="grid" style="
-                    display: grid; 
-                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-                    gap: 32px;
-                ">
-                    ${cardsHTML}
-                </div>
-            </div>
+            <h2>Gradient Descent</h2>
+            <p>Adjust the <b>Learning Rate</b>. Watch the agent optimize to find the global minimum.</p>
         `;
-        this.container.appendChild(this.element);
+        container.appendChild(this.element);
     }
 
-    initAnimations() {
-        const cards = this.element.querySelectorAll('.sim-card');
+    createControls() {
+        if(!this.gui) {
+            this.gui = new GUI({ title: 'Gradient Controls' });
+            this.gui.domElement.style.position = 'fixed';
+            this.gui.domElement.style.top = '100px';
+            this.gui.domElement.style.right = '20px';
+        }
+        this.gui.add(this.params, 'learningRate', 0.001, 0.2).name('Learning Rate');
+        this.gui.add(this.params, 'speed', 0, 2).name('Speed');
+        this.gui.add(this.params, 'reset').name('Reset');
+    }
 
-        ScrollTrigger.batch(cards, {
-            start: 'top 80%',
-            onEnter: batch => gsap.to(batch, {
-                opacity: 1,
-                y: 0,
-                stagger: 0.15,
-                overwrite: true,
-                duration: 0.8,
-                ease: 'power3.out'
-            }),
-            once: true // Only animate once
-        });
+    createLossLandscape() {
+        // Wireframe Terrain
+        const geometry = new THREE.PlaneGeometry(20, 20, 48, 48);
+        const count = geometry.attributes.position.count;
+        for(let i = 0; i < count; i++) {
+            const x = geometry.attributes.position.getX(i);
+            const y = geometry.attributes.position.getY(i);
+            const z = Math.sin(x * 0.4) * Math.cos(y * 0.4) * 3; 
+            geometry.attributes.position.setZ(i, z);
+        }
+        geometry.computeVertexNormals();
+
+        const material = new THREE.MeshStandardMaterial({ color: '#576A8F', wireframe: true, side: THREE.DoubleSide });
+        this.terrain = new THREE.Mesh(geometry, material);
+        this.terrain.rotation.x = -Math.PI * 0.5;
+        this.instance.add(this.terrain);
+
+        // Red Ball
+        this.ball = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 32, 32),
+            new THREE.MeshStandardMaterial({ color: '#FF7444' })
+        );
+        this.resetBall();
+        this.instance.add(this.ball);
+    }
+
+    resetBall() { this.ball.position.set(4, 5, 4); }
+
+    update() {
+        if(this.ball) {
+            // Simple Descent Logic
+            const x = this.ball.position.x;
+            const z = this.ball.position.z;
+            const gradX = Math.cos(x * 0.4) * Math.cos(z * 0.4); // Simplified derivative
+            const gradZ = Math.sin(x * 0.4) * -Math.sin(z * 0.4);
+            
+            this.ball.position.x -= gradX * this.params.learningRate * this.params.speed;
+            this.ball.position.z -= gradZ * this.params.learningRate * this.params.speed;
+
+            // Height Calculation
+            const y = Math.sin(this.ball.position.x * 0.4) * Math.cos(this.ball.position.z * 0.4) * 3;
+            this.ball.position.y = y + 0.5;
+
+            if(this.ball.position.distanceTo(new THREE.Vector3(0,0,0)) < 0.5) this.resetBall();
+            this.instance.rotation.y += 0.001;
+        }
     }
 }

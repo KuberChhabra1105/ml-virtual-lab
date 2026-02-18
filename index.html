@@ -1,39 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>ML Virtual Lab</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    html,body{
-      margin:0;
-      padding:0;
-      overflow:hidden;
-      background:#fff8de;
-      font-family: Inter, sans-serif;
-    }
-    canvas{
-      position:fixed;
-      top:0;
-      left:0;
-      outline:none;
-    }
-    .title{
-      position:fixed;
-      top:40px;
-      left:40px;
-      font-size:28px;
-      font-weight:700;
-      color:#222;
-      z-index:10;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ML Virtual Lab</title>
 </head>
 <body>
+    <canvas id="webgl"></canvas>
+    
+    <div class="nav-toggle" id="nav-toggle">
+        <div style="background: #333; height: 2px; width: 30px; margin: 6px 0;"></div>
+        <div style="background: #333; height: 2px; width: 30px; margin: 6px 0;"></div>
+    </div>
 
-<div class="title">ML Virtual Lab</div>
-<canvas class="webgl"></canvas>
+    <main id="app">
+        <section id="hero">
+            <h1>Neural Architectures</h1>
+            <p>Interactive 3D Machine Learning Laboratory</p>
+            <button id="start-btn" style="margin-top: 2rem; padding: 1rem 2rem; background: #FF7444; color: white; border: none; border-radius: 50px; font-size: 1rem; cursor: pointer; font-weight: bold;">
+                Start Experiment
+            </button>
+        </section>
+        
+        </main>
 
-<script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>

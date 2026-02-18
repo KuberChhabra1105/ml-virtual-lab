@@ -1,109 +1,104 @@
-import * as THREE from "three"
+import * as THREE from 'three';
 
-export class HeroSection {
-  constructor(experience) {
-    this.experience = experience
-    this.scene = experience.scene.instance
-    this.camera = experience.camera.instance
-    this.time = experience.time
+export default class HeroSection {
+    constructor(experience) {
+        this.experience = experience;
+        this.scene = experience.scene;
+        this.time = experience.time;
 
-    this.mouse = new THREE.Vector2(0, 0)
-
-    this.setLights()
-    this.setMesh()
-    this.setParticles()
-    this.setMouse()
-  }
-
-  setLights() {
-    this.ambient = new THREE.AmbientLight(0xffffff, 0.4)
-    this.scene.add(this.ambient)
-
-    this.keyLight = new THREE.DirectionalLight(0xff7444, 1.2)
-    this.keyLight.position.set(3, 3, 5)
-    this.scene.add(this.keyLight)
-
-    this.rimLight = new THREE.DirectionalLight(0x576a8f, 1.5)
-    this.rimLight.position.set(-5, 2, -5)
-    this.scene.add(this.rimLight)
-  }
-
-  setMesh() {
-    this.geometry = new THREE.IcosahedronGeometry(2, 64)
-
-    this.material = new THREE.MeshStandardMaterial({
-      color: 0x576a8f,
-      roughness: 0.25,
-      metalness: 0.5
-    })
-
-    this.mesh = new THREE.Mesh(this.geometry, this.material)
-    this.scene.add(this.mesh)
-  }
-
-  setParticles() {
-    const count = 2000
-
-    const geometry = new THREE.BufferGeometry()
-    const positions = new Float32Array(count * 3)
-
-    for (let i = 0; i < count; i++) {
-      positions[i * 3 + 0] = (Math.random() - 0.5) * 20
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 20
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 20
+        this.setMaterial();
+        this.setGeometry();
+        this.setMesh();
     }
 
-    geometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(positions, 3)
-    )
-
-    this.particleMaterial = new THREE.PointsMaterial({
-      size: 0.02,
-      color: 0xb7bdf7,
-      transparent: true,
-      opacity: 0.6
-    })
-
-    this.particles = new THREE.Points(geometry, this.particleMaterial)
-    this.scene.add(this.particles)
-  }
-
-  setMouse() {
-    window.addEventListener("mousemove", (event) => {
-      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-    })
-  }
-
-  update() {
-    const elapsed = this.time.elapsed * 0.001
-
-    // Subtle organic morph
-    const positions = this.geometry.attributes.position
-    for (let i = 0; i < positions.count; i++) {
-      const x = positions.getX(i)
-      const y = positions.getY(i)
-      const z = positions.getZ(i)
-
-      const distortion =
-        Math.sin(elapsed + x * 2) *
-        0.05
-
-      positions.setXYZ(i, x + distortion, y + distortion, z + distortion)
+    setMaterial() {
+        this.material = new THREE.PointsMaterial({
+            size: 0.15,
+            sizeAttenuation: true,
+            color: '#576A8F', 
+            transparent: true,
+            opacity: 0.9
+        });
+        
+        this.lineMaterial = new THREE.LineBasicMaterial({
+            color: '#FF7444',
+            transparent: true,
+            opacity: 0.25,
+            blending: THREE.AdditiveBlending
+        });
     }
-    positions.needsUpdate = true
-    this.geometry.computeVertexNormals()
 
-    // Slow cinematic rotation
-    this.mesh.rotation.y += 0.002
-    this.mesh.rotation.x += 0.001
+    setGeometry() {
+        this.count = 80;
+        this.positions = new Float32Array(this.count * 3);
+        this.velocities = [];
 
-    // Mouse parallax
-    this.mesh.rotation.y += this.mouse.x * 0.001
-    this.mesh.rotation.x += this.mouse.y * 0.001
+        for(let i = 0; i < this.count; i++) {
+            const i3 = i * 3;
+            this.positions[i3] = (Math.random() - 0.5) * 14; 
+            this.positions[i3 + 1] = (Math.random() - 0.5) * 10; 
+            this.positions[i3 + 2] = (Math.random() - 0.5) * 8; 
 
-    // Particle subtle drift
-    this.particles.rotation.y += 0.0005
-  }
+            this.velocities.push({
+                x: (Math.random() - 0.5) * 0.01,
+                y: (Math.random() - 0.5) * 0.01,
+                z: (Math.random() - 0.5) * 0.01
+            });
+        }
+
+        this.geometry = new THREE.BufferGeometry();
+        this.geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
+    }
+
+    setMesh() {
+        this.points = new THREE.Points(this.geometry, this.material);
+        this.linesGeometry = new THREE.BufferGeometry();
+        this.lines = new THREE.LineSegments(this.linesGeometry, this.lineMaterial);
+
+        this.group = new THREE.Group();
+        this.group.add(this.points);
+        this.group.add(this.lines);
+        
+        this.scene.add(this.group);
+    }
+
+    update() {
+        // Rotate cloud based on mouse interaction
+        this.group.rotation.y = this.experience.time.elapsed * 0.0002 + (this.experience.mouse.x * 0.3);
+        this.group.rotation.x = -(this.experience.mouse.y * 0.3);
+
+        // Move Particles
+        for(let i = 0; i < this.count; i++) {
+            const i3 = i * 3;
+            this.positions[i3] += this.velocities[i].x;
+            this.positions[i3 + 1] += this.velocities[i].y;
+            this.positions[i3 + 2] += this.velocities[i].z;
+
+            // Bounce check
+            if(Math.abs(this.positions[i3]) > 7) this.velocities[i].x *= -1;
+            if(Math.abs(this.positions[i3 + 1]) > 5) this.velocities[i].y *= -1;
+        }
+        this.geometry.attributes.position.needsUpdate = true;
+
+        // Draw Lines
+        const linePositions = [];
+        const connectDistance = 2.5;
+
+        for(let i = 0; i < this.count; i++) {
+            for(let j = i + 1; j < this.count; j++) {
+                const dx = this.positions[i*3] - this.positions[j*3];
+                const dy = this.positions[i*3+1] - this.positions[j*3+1];
+                const dz = this.positions[i*3+2] - this.positions[j*3+2];
+                const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+
+                if(dist < connectDistance) {
+                    linePositions.push(
+                        this.positions[i*3], this.positions[i*3+1], this.positions[i*3+2],
+                        this.positions[j*3], this.positions[j*3+1], this.positions[j*3+2]
+                    );
+                }
+            }
+        }
+        this.linesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+    }
 }

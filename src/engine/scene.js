@@ -1,14 +1,17 @@
-import * as THREE from "three"
+import * as THREE from 'three';
 
 export class SceneSetup {
     constructor(experience) {
-        this.scene = experience.scene
+        this.experience = experience;
+        this.scene = this.experience.scene;
+        
+        // Soft ambient light
+        const ambientLight = new THREE.AmbientLight('#ffffff', 0.5);
+        this.scene.add(ambientLight);
 
-        const light = new THREE.DirectionalLight(0xffffff, 2)
-        light.position.set(2, 2, 3)
-        this.scene.add(light)
-
-        const ambient = new THREE.AmbientLight(0xffffff, 0.5)
-        this.scene.add(ambient)
+        // Strong directional light (sun)
+        const directionalLight = new THREE.DirectionalLight('#ffffff', 2);
+        directionalLight.position.set(5, 10, 7);
+        this.scene.add(directionalLight);
     }
 }
